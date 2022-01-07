@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import Airline from './Airline';
-import '../App.css';
+import AirlineCard from './AirlineCard';
+import './App.css';
 
 const Airlines = () => {
 
@@ -13,10 +13,15 @@ const Airlines = () => {
         .catch( resp => console.log(resp))
     }, [airlines.length])
 
-    const grid = airlines.map(item => {
-        return (<Airline 
-                    key={item.attributes.name}
-                    attributes={item.attributes} />)
+    const grid = airlines.map((airline, index) => {
+        const {name, image_url, slug, avg_score } = airline.attributes
+        return (<AirlineCard 
+                    key={index}
+                    name={name}
+                    image_url={image_url}
+                    slug={slug}
+                    avg_score={avg_score}
+                />)
     })
 
     return (
