@@ -3,24 +3,23 @@ import axios from 'axios';
 import AirlineCard from './AirlineCard';
 import './App.css';
 
-const Airlines = () => {
+function Airlines() {
 
     const [airlines, setAirlines] = useState([])
 
     useEffect(() => {
-        axios.get('api/v1/airlines.json')
-        .then( resp => setAirlines(resp.data.data))
-        .catch( resp => console.log(resp))
-    }, [airlines.length])
+        axios.get('api/v1/airlines')
+        .then( data => {console.log(data)
+            setAirlines(data.data.data)})
+    }, [])
 
     const grid = airlines.map((airline, index) => {
-        const {name, image_url, slug, avg_score } = airline.attributes
         return (<AirlineCard 
                     key={index}
-                    name={name}
-                    image_url={image_url}
-                    slug={slug}
-                    avg_score={avg_score}
+                    name={airline.attributes.name}
+                    image_url={airline.attributes.image_url}
+                    slug={airline.attributes.slug}
+                    avg_score={airline.attributes.avg_score}
                 />)
     })
 

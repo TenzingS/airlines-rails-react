@@ -1,42 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Header from './Header';
-import Reviewform from './ReviewForm';
+import { useParams } from "react-router-dom";
 
-function Airline() {
-    const slug = useParams();
-    console.log(slug)
-    // const [airline, setAirline] = useState({})
-    // const [review, setReview] = useState({})
-    // const [loaded, setLoaded] = useState(false)
+const Airline = () => {
+    const params = useParams();
 
-     useEffect(() => {
-        // axios.get(`api/v1/airlines/${slug}`)
-        // .then(r => r.json())
-        //  .then(r => {
-        //      console.log(r)
-        //   setAirline(r.data)
-        //   setLoaded(true)
-        //   })
-        //  .catch(r => console.log(r))        
-     }, [])
+    const [airline, setAirline] = useState({})
+    const [review, setReview] = useState({})
+
+    useEffect(() => {
+        console.log(params.slug)
+        const url = `api/v1/airlines/${params.slug}`
+        
+        axios.get(url)
+        .then(resp => resp.json())
+        .then(data => console.log(data))
+        .catch( resp => console.log(resp))
+    }, [])
 
     return (
-        <div className='Wrapper'> Airline
-            {/* <div className='column' >
-                { loaded && <Header 
-              //  attributes = {airline.data.attributes} 
-                />}
-                <div className='reviews' ></div>
-            </div>
-            <div className='column' >
-                <Reviewform 
-                        handleChange ={handleChange} 
-                        handleSubmit={handleSubmit} 
-                        // attributes = {airline.data.attributes}
-                        review={review}/>
-            </div> */}
+        <div>
+            <h3>Airline Show </h3>
         </div>
     );
 }
