@@ -5,7 +5,6 @@ const Header = ({attr, reviews}) => {
 
     return (
         <div className='wrapper-header'>
-            {console.log(attr)}
             <h1> <img src={attr.image_url} alt={attr.name} />{attr.name}</h1>
             <div>
                 <div className='totalReviews'>{total} User Reviews</div>
