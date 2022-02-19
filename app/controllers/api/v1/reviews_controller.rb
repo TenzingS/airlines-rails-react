@@ -2,10 +2,18 @@ module Api
     module V1
         class ReviewsController < ApplicationController
             protect_from_forgery with: :null_session
-            def create
-                review = Review.new(review_params)
 
-                if review.save
+            def index
+                airline = Airline.find_by(slug: params[:slug])
+                reviews = airline.reviews
+                render json: reviews
+            end
+
+            def create
+                airline = Airline.find_by(id: params[:airline_id])
+                review = airline.reviews.create(review_params)
+
+                if review
                     render json: ReviewSerializer.new(review).serializable_hash
                 else
                     render json: {error: review.errors.messages}, status: 422

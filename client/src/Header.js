@@ -2,6 +2,7 @@ import React from 'react';
 
 const Header = ({attr, reviews}) => {
     const total = reviews.data.length
+    // console.log(reviews)
 
     return (
         <div className='wrapper-header'>

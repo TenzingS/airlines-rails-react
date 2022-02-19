@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import Header from './Header';
@@ -17,9 +18,8 @@ const Airline = () => {
         .then(r => r.json())
         .then(data => {
             setAirline(data.data)
-            console.log(data.data)
             setLoaded(true)
-            console.log(data.data.relationships)
+            console.log(data.data)
             })
         .catch(data => console.log(data))
     }, [])
@@ -27,12 +27,24 @@ const Airline = () => {
     const handleChange = (e) => {
         e.preventDefault();
         setReview(Object.assign({}, review, {[e.target.name]: e.target.value}))
-        console.log('reviw:', review)
+        console.log('review:', review)
     }
 
     const handleSubmit= (e) => {
         e.preventDefault();
-        const airline_id = airline.data.id
+        
+        fetch(`/api/v1/airlines/${params.slug}/reviews`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({review, airline_id: airline.id})
+        })
+       .then(resp => {
+           const included = [...airline.included, resp.data]
+           setAirline({...airline, included})
+           setReview({title: '', description: '', score: 0})
+       })
     }
 
     return (
