@@ -1,8 +1,8 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import Header from './Header';
 import Reviewform from './ReviewForm';
+import Review from './Review';
 
 const Airline = () => {
     const params = useParams();
@@ -19,10 +19,10 @@ const Airline = () => {
         .then(data => {
             setAirline(data.data)
             setLoaded(true)
-            console.log(data.data)
+            console.log(data)
             })
         .catch(data => console.log(data))
-    }, [])
+    }, [params.slug])
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -40,11 +40,29 @@ const Airline = () => {
             },
             body: JSON.stringify({review, airline_id: airline.id})
         })
-       .then(resp => {
-           const included = [...airline.included, resp.data]
+        .then(r => r.json())
+       .then(r => {
+           const included = [...airline.included, r.data]
+           console.log(included)
            setAirline({...airline, included})
            setReview({title: '', description: '', score: 0})
        })
+    }
+
+    const setRating = (score, e) => {
+        setReview({...review, score})
+    }
+
+    let reviews
+    if (airline.included) {
+        reviews = airline.included.map((item, index) => {
+            console.log('mapping:', item)
+            return (
+                <Review
+                    key={index}
+                    attributes={item} />
+            )
+        })
     }
 
     return (
@@ -55,13 +73,14 @@ const Airline = () => {
                 attr = {airline.attributes}
                 reviews = {airline.relationships.reviews}
                 />}
-                <div className='reviews'></div>    
+                {reviews}    
             </div>  
             <div className='column'>
                 {loaded &&
                 <Reviewform 
                     handleChange = {handleChange}
                     handleSubmit = {handleSubmit}
+                    setRating = {setRating}
                     name= {airline.attributes.name}
                     review = {review}
                 />}

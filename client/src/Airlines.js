@@ -9,7 +9,7 @@ function Airlines() {
 
     useEffect(() => {
         axios.get('api/v1/airlines')
-        .then( data => {console.log(data)
+        .then( data => {
             setAirlines(data.data.data)})
     }, [])
 
